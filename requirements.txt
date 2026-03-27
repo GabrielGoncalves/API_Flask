@@ -48,7 +48,9 @@ mdurl==0.1.2
 multidict==6.7.1
     # via httpie
 pydantic==2.12.5
-    # via flask-pydantic-spec
+    # via
+    #   -r requirements.in
+    #   flask-pydantic-spec
 pydantic-core==2.41.5
     # via pydantic
 pygments==2.19.2
