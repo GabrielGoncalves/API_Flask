@@ -6,11 +6,13 @@ server = Flask(__name__)
 spec = FlaskPydanticSpec('Flask', title='Teste da API')
 spec.register(server)
 
-class MensagemRetorno(BaseModel):
-    mensagem: str
+class Pessoa(BaseModel):
+    id: int
+    nome: str
+    idade: int
 
 @server.get('/pessoas')
-@spec.validate(resp=Response(HTTP_200=MensagemRetorno)) 
+@spec.validate(resp=Response(HTTP_200=Pessoa)) 
 def buscar_pessoas():
     return {'mensagem': 'Programaticamente Falando'}
 
