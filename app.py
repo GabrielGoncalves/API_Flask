@@ -9,20 +9,31 @@ from pydantic import BaseModel, Field
 from tinydb import TinyDB, Query
 
 server = Flask(__name__)
-spec = FlaskPydanticSpec('Flask', title='Teste da API')
+spec = FlaskPydanticSpec('Flask', title='API com Flask')
 spec.register(server)
 database = TinyDB('database.json')
 
-class Pessoa(BaseModel):
+class Teste(BaseModel):
     id: int
+
+class Pessoa(BaseModel):
+    id: Optional[int]
     nome: str
     idade: int
 
+class Pessoas(BaseModel):
+    pessoas: list[Pessoa]
+    count: int
+
 @server.get('/pessoas')
-@spec.validate(resp=Response(HTTP_200=Pessoa)) 
+@spec.validate(resp=Response(HTTP_200=Pessoas)) 
 def buscar_pessoas():
     """Retorna todas as pessoas da base de dados."""
-    return jsonify(database.all())
+    return jsonify(
+        Pessoas(pessoas=database.all(),
+                count=len(database.all())
+                ).dict()
+    )
 
 @server.post('/pessoas')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_201=Pessoa))
