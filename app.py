@@ -42,6 +42,17 @@ def inserir_pessoa():
     body = request.context.body.dict()
     database.insert(body)
     return body
+<<<<<<< HEAD
     ...
+=======
+
+@server.put('/pessoas/<int:id>')
+@spec.validate(body=Request(Pessoa), resp=Response(HTTP_200=Pessoa))
+def altera_pessoa(id):
+    Pessoa = Query()
+    body = request.context.body.dict()
+    database.update(body, Pessoa.id == id)
+    return jsonify(body)
+>>>>>>> 6123ae8 (criação do metodo PUT)
 
 server.run()
