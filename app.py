@@ -12,12 +12,11 @@ server = Flask(__name__)
 spec = FlaskPydanticSpec('Flask', title='API com Flask')
 spec.register(server)
 database = TinyDB('database.json')
+pessoa_id = count()
 
-class Teste(BaseModel):
-    id: int
 
 class Pessoa(BaseModel):
-    id: Optional[int]
+    id: Optional[int] = Field(default_factory=lambda: next(pessoa_id))
     nome: str
     idade: int
 
@@ -50,5 +49,13 @@ def altera_pessoa(id):
     body = request.context.body.dict()
     database.update(body, Pessoa.id == id)
     return jsonify(body)
+
+@server.delete('/pessoas/<int:id>')
+@spec.validate(resp=Response('HTTP_204'))
+def deleta_pessoa(id):
+    """Remove uma pessoa do banco de dados"""
+    Pessoa = Query()
+    database.remove(Pessoa.id == id)
+    return jsonify({})
 
 server.run()
