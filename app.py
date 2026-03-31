@@ -27,7 +27,7 @@ class Pessoas(BaseModel):
 @server.get('/pessoas')
 @spec.validate(resp=Response(HTTP_200=Pessoas)) 
 def buscar_pessoas():
-    """Retorna todas as pessoas da base de dados."""
+    """Retorna todas as Pessoas da base de dados."""
     return jsonify(
         Pessoas(pessoas=database.all(),
                 count=len(database.all())
@@ -37,7 +37,7 @@ def buscar_pessoas():
 @server.post('/pessoas')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_201=Pessoa))
 def inserir_pessoa():
-    """Insere pessoa no banco de dados."""
+    """Insere Pessoa no banco de dados."""
     body = request.context.body.dict()
     database.insert(body)
     return body
@@ -45,6 +45,7 @@ def inserir_pessoa():
 @server.put('/pessoas/<int:id>')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_200=Pessoa))
 def altera_pessoa(id):
+    """Altera Pessoa no banco de dados."""
     Pessoa = Query()
     body = request.context.body.dict()
     database.update(body, Pessoa.id == id)
@@ -53,7 +54,7 @@ def altera_pessoa(id):
 @server.delete('/pessoas/<int:id>')
 @spec.validate(resp=Response('HTTP_204'))
 def deleta_pessoa(id):
-    """Remove uma pessoa do banco de dados"""
+    """Remove Pessoa do banco de dados."""
     Pessoa = Query()
     database.remove(Pessoa.id == id)
     return jsonify({})

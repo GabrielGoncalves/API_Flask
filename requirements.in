@@ -1,0 +1,6 @@
+flask
+flask-pydantic-spec
+httpie
+pydantic
+tinydb
+itertools
