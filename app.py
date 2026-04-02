@@ -34,6 +34,16 @@ def buscar_pessoas():
                 ).dict()
     )
 
+@server.get('/pessoas/<int:id>')
+@spec.validate(resp=Response(HTTP_200=Pessoa))
+def buscar_pessoa(id):
+    """Retorna Pessoa da base de dados."""
+    try:
+        pessoa = database.search(Query().id == id)[0]
+    except IndexError:
+        return {'message': 'Pessoa not found!'}, 404
+    return jsonify(pessoa)
+
 @server.post('/pessoas')
 @spec.validate(body=Request(Pessoa), resp=Response(HTTP_201=Pessoa))
 def inserir_pessoa():
@@ -43,7 +53,7 @@ def inserir_pessoa():
     return body
 
 @server.put('/pessoas/<int:id>')
-@spec.validate(body=Request(Pessoa), resp=Response(HTTP_200=Pessoa))
+@spec.validate(body=Request(Pessoa), resp=Response(HTTP_201=Pessoa))
 def altera_pessoa(id):
     """Altera Pessoa no banco de dados."""
     Pessoa = Query()
